@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
 public interface BookRepository {
     List<Book> findAll();
     List<Book> searchBooks(String text, Double rating);
