@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Book Reservation - Choose a Book</title>
+    <style>
+        body { width:800px; margin:auto; font-family:Arial,sans-serif; }
+        .book-option { margin:10px 0; padding:10px; border:1px solid #ddd; border-radius:5px; }
+        .book-option:hover { background:#f5f5f5; }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Welcome to our Book Reservation App</h1>
+</header>
+
+<main>
+    <form action="/" method="POST">
+        <input type="text" name="text" placeholder="Search by title" />
+        <input type="number" name="rating" min="0" max="5" step="0.1" placeholder="Min rating" />
+        <button type="submit">Search</button>
+    </form>
+
+    <form action="/bookReservation" method="POST">
+        <h2>Choose a book:</h2>
+        <div th:each="book : ${books}" class="book-option">
+            <input type="radio" name="bookTitle" th:value="${book.title}" required>
+            <span th:text="'Title: ' + ${book.title} + ', Genre: ' + ${book.genre} + ', Rating: ' + ${book.averageRating}"></span>
+        </div>
+
+        <h2>Enter your information:</h2>
+        <label>Your Name:</label>
+        <input type="text" name="readerName" required><br/>
+        <label>Your Address:</label>
+        <input type="text" name="readerAddress" required><br/>
+
+        <h2>Choose number of copies:</h2>
+        <input type="number" name="numCopies" min="1" max="10" required><br/><br/>
+        <input type="submit" value="Reserve Book">
+    </form>
+</main>
+</body>
+</html>
