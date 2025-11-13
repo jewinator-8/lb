@@ -1,0 +1,25 @@
+package mk.ukim.finki.wp.lab.model;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+@Data
+public class Author {
+
+    private Long id;
+    private String name;
+    private String surname;
+    private String country;
+    private String biography;
+
+    public Author() {
+    }
+
+    public Author(String name, String surname, String country, String biography) {
+        this.id = (long) (Math.random() * 10000); // random ID
+        this.name = name;
+        this.surname = surname;
+        this.country = country;
+        this.biography = biography;
+    }
+}
