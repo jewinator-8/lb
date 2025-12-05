@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @Controller
 @RequestMapping("/books")
 public class BookController {
@@ -38,11 +40,14 @@ public class BookController {
 
     @GetMapping("/book-form/{id}")
     public String getEditBookForm(@PathVariable Long id, Model model) {
-        var book = bookService.findById(id).orElse(null);
-        if (book == null) return "redirect:/books?error=BookNotFound";
-        model.addAttribute("book", book);
-        model.addAttribute("authors", authorService.findAll());
-        return "book-form";
+        try {
+            Book book = bookService.findById(id);
+            model.addAttribute("book", book);
+            model.addAttribute("authors", authorService.findAll());
+            return "book-form";
+        } catch (RuntimeException e) {
+            return "redirect:/books?error=BookNotFound";
+        }
     }
 
     @PostMapping("/add")

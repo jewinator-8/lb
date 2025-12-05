@@ -1,13 +1,30 @@
 package mk.ukim.finki.wp.lab.model;
 
-import lombok.AllArgsConstructor;
+import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
+@NoArgsConstructor
+@Entity
 public class BookReservation {
-    String bookTitle;
-    String readerName;
-    String readerAddress;
-    Long numberOfCopies;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String bookTitle;
+    private String readerName;
+    private String readerAddress;
+    private Long numberOfCopies;
+
+    public BookReservation(String bookTitle,
+                           String readerName,
+                           String readerAddress,
+                           Long numberOfCopies) {
+        this.bookTitle = bookTitle;
+        this.readerName = readerName;
+        this.readerAddress = readerAddress;
+        this.numberOfCopies = numberOfCopies;
+    }
 }

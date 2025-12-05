@@ -1,34 +1,37 @@
 package mk.ukim.finki.wp.lab.model;
 
-
-import lombok.AllArgsConstructor;
+import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
-@Data
-@AllArgsConstructor
-@Getter
-@Setter
+@Entity
 public class Book {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String title;
     private String genre;
-    private double averageRating;
+    private Double averageRating;
+
+    @ManyToOne
     private Author author;
 
-    // No-args constructor (needed by frameworks)
     public Book() {}
 
-    // Constructor used in your DataHolder initialization
-    public Book(String title, String genre, double rating, Author author) {
-        this.id = (long) (Math.random() * 10000);
-        this.title = title;
-        this.genre = genre;
-        this.averageRating = rating;
-        this.author = author;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    // getters/setters...
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
+
+    public String getGenre() { return genre; }
+    public void setGenre(String genre) { this.genre = genre; }
+
+    public Double getAverageRating() { return averageRating; }
+    public void setAverageRating(Double averageRating) { this.averageRating = averageRating; }
+
+    public Author getAuthor() { return author; }
+    public void setAuthor(Author author) { this.author = author; }
 }

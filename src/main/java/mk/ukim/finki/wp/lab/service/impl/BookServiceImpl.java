@@ -11,11 +11,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class BookServiceImpl  implements BookService {
+public class BookServiceImpl implements BookService {
+
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
 
-    public BookServiceImpl(BookRepository bookRepository, AuthorRepository authorRepository) {
+    public BookServiceImpl(BookRepository bookRepository,
+                           AuthorRepository authorRepository) {
         this.bookRepository = bookRepository;
         this.authorRepository = authorRepository;
     }
@@ -27,27 +29,52 @@ public class BookServiceImpl  implements BookService {
 
     @Override
     public List<Book> searchBooks(String text, Double rating) {
-        return bookRepository.searchBooks(text, rating);
+        if (text == null && rating == null) {
+            return bookRepository.findAll();
+        }
+
+        return bookRepository.findAll().stream()
+                .filter(b ->
+                        (text == null || b.getTitle().toLowerCase().contains(text.toLowerCase())) &&
+                                (rating == null || b.getAverageRating() >= rating)
+                )
+                .toList();
     }
 
     @Override
-    public Optional<Book> findById(Long id) { return bookRepository.findById(id); }
-
+    public Book findById(Long id) {
+        return bookRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Book not found"));
+    }
 
     @Override
-    public void deleteById(Long id) { bookRepository.deleteById(id); }
-
+    public void deleteById(Long id) {
+        bookRepository.deleteById(id);
+    }
 
     @Override
     public Book create(String title, String genre, Double rating, Long authorId) {
-        Author author = authorRepository.findById(authorId).orElse(null);
-        var book = new Book(title, genre, rating, author);
-        return bookRepository.save(book);
+        Author author = authorRepository.findById(authorId).orElseThrow();
+
+        Book b = new Book();
+        b.setTitle(title);
+        b.setGenre(genre);
+        b.setAverageRating(rating);
+        b.setAuthor(author);
+
+        return bookRepository.save(b);
     }
 
     @Override
     public Book update(Long id, String title, String genre, Double rating, Long authorId) {
-        Author author = authorRepository.findById(authorId).orElse(null);
-        return bookRepository.update(id, title, genre, rating, author);
+        Book book = bookRepository.findById(id).orElseThrow();
+        Author author = authorRepository.findById(authorId).orElseThrow();
+
+        book.setTitle(title);
+        book.setGenre(genre);
+        book.setAverageRating(rating);
+        book.setAuthor(author);
+
+        return bookRepository.save(book);
     }
 }

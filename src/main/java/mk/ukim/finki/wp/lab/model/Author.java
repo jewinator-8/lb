@@ -1,25 +1,23 @@
 package mk.ukim.finki.wp.lab.model;
 
-import lombok.AllArgsConstructor;
+import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@Entity
 public class Author {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
+
     private String surname;
+
     private String country;
+
     private String biography;
-
-    public Author() {
-    }
-
-    public Author(String name, String surname, String country, String biography) {
-        this.id = (long) (Math.random() * 10000); // random ID
-        this.name = name;
-        this.surname = surname;
-        this.country = country;
-        this.biography = biography;
-    }
 }
